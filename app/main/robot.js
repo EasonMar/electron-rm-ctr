@@ -7,7 +7,6 @@ function handleMouse(data) {
   // data {clientX, clientY, screen: {width, height}, video: {width, height}}
   let x = clientX * screen.width / video.width * scaleFactor
   let y = clientY * screen.height / video.height * scaleFactor
-  console.log(x, y)
   robot.moveMouse(x, y)
   robot.mouseClick()
 }
@@ -28,7 +27,6 @@ function handleKey(data) {
 module.exports = function () {
   const primaryDisplay = screen.getPrimaryDisplay()
   ipcMain.on('robot', (e, type, data) => {
-    console.log('handle', type, data)
     if (type === 'mouse') {
       data.scaleFactor = primaryDisplay.scaleFactor
       handleMouse(data)

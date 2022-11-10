@@ -25,7 +25,6 @@ function send(channel, ...args) {
 function capturer() {
   desktopCapturer.getSources({ types: ['screen'] }).then(async sources => {
     for (const source of sources) {
-      console.log(source.id)
       if (source.id === 'screen:0:0') {
         win.webContents.send('SET_SOURCE', source.id)
         return
