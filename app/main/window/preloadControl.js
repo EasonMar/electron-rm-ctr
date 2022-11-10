@@ -34,7 +34,19 @@ const { ipcRenderer, contextBridge } = require('electron')
 
 // 为什么放到app.js大概率会失效？--- 监听时机的问题！消息发完之后才开启的监听... 
 // SET_SOURCE 消息的发送, 要放在页面load完之后执行... win.loadFile(xxx).then(capturer)
+
+// window.screen 返回屏幕的宽高
+const { width: screenWidth, height: screenHeight } = window.screen
 contextBridge.exposeInMainWorld('electronAPI', {
-  getStream: (cb) => ipcRenderer.on('SET_SOURCE', cb)
+  getStream: (cb) => ipcRenderer.on('SET_SOURCE', cb),
+  robot: (type, data) => {
+    if (type === 'mouse') {
+      data.screen = {
+        width: screenWidth,
+        height: screenHeight
+      }
+    }
+    ipcRenderer.send('robot', type, data)
+  }
 })
 
