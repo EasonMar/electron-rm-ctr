@@ -1,6 +1,7 @@
 // 在 preload 脚本中。
 const { ipcRenderer, contextBridge } = require('electron')
 
+// // 直接放到 preload 中, 完全正常
 // ipcRenderer.on('SET_SOURCE', async (event, sourceId) => {
 //   try {
 //     const stream = await navigator.mediaDevices.getUserMedia({
@@ -21,26 +22,19 @@ const { ipcRenderer, contextBridge } = require('electron')
 //     handleError(e)
 //   }
 // })
-
 // function handleStream(stream) {
 //   const video = document.querySelector('video')
 //   video.srcObject = stream
 //   video.onloadedmetadata = (e) => video.play()
 // }
-
 // function handleError(e) {
 //   console.log(e)
 // }
 
 
-ipcRenderer.on('SET_SOURCE', async (event, sourceId) => {
-  console.log('PPPP preloadControl listening')
-})
-
-// 为什么放到app里面经常失效呢？--- 时机的问题？ 消息发完之后才开启的监听？
+// 为什么放到app.js大概率会失效？--- 监听时机的问题！消息发完之后才开启的监听... 
+// SET_SOURCE 消息的发送, 要放在页面load完之后执行... win.loadFile(xxx).then(capturer)
 contextBridge.exposeInMainWorld('electronAPI', {
-  // 这两行有啥区别 --- 仅仅是返回值的区别吧....
-  // getStream: (cb) => { ipcRenderer.on('SET_SOURCE', cb) }
   getStream: (cb) => ipcRenderer.on('SET_SOURCE', cb)
 })
 

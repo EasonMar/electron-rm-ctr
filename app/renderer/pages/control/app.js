@@ -1,5 +1,4 @@
 window.electronAPI.getStream(async (event, sourceId) => {
-  console.log('AAAAA APP listening')
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: false,

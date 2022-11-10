@@ -3,8 +3,7 @@ const { app, BrowserWindow } = require('electron')
 const { create: createWindow, capturer } = require('./window/control')
 const handleIPC = require('./ipc')
 app.whenReady().then(() => {
-  createWindow()
-  capturer()
+  createWindow().then(capturer)
   handleIPC()
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()

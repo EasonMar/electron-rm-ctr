@@ -11,7 +11,7 @@ function create() {
     }
   })
 
-  win.loadFile(path.resolve(__dirname, '../../renderer/pages/control/index.html'))
+  return win.loadFile(path.resolve(__dirname, '../../renderer/pages/control/index.html'))
 
 }
 
