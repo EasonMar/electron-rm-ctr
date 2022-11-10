@@ -1,0 +1,23 @@
+{
+  "name": "electron-rm-ctr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app/main/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm run renderer \" \"wait-on http://localhost:3000 && npm run start:main\"",
+    "start:main": "electron .",
+    "renderer": "cd app/renderer/src/main & npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.5.0",
+    "electron": "^21.2.2",
+    "wait-on": "^6.0.1"
+  },
+  "dependencies": {
+    "electron-is-dev": "^2.0.0"
+  }
+}
