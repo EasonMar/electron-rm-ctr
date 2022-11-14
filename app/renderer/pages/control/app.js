@@ -1,23 +1,3 @@
-window.electronAPI.getStream(async (event, sourceId) => {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        mandatory: {
-          chromeMediaSource: 'desktop',
-          chromeMediaSourceId: sourceId,
-          minWidth: 1280,
-          maxWidth: 1280,
-          minHeight: 720,
-          maxHeight: 720
-        }
-      }
-    })
-    handleStream(stream)
-  } catch (e) {
-    handleError(e)
-  }
-})
 
 const video = document.querySelector('video')
 function handleStream(stream) {
@@ -25,9 +5,30 @@ function handleStream(stream) {
   video.onloadedmetadata = (e) => video.play()
 }
 
-function handleError(e) {
-  console.log(e)
+// =================== P2P数据传输 ===================
+// RTCPeerConnection - 控制端
+const pc = new window.RTCPeerConnection({})
+async function createOffer() {
+  const offer = await pc.createOffer({
+    offerToReceiveAudio: false,
+    offerToReceiveVideo: true
+  })
+  await pc.setLocalDescription(offer)
+  console.log(`pc offer`, JSON.stringify(offer))
+  return pc.localDescription
 }
+createOffer()
+
+async function setRemote(answer) {
+  await pc.setRemoteDescription(answer)
+}
+window.setRemote = setRemote
+pc.ontrack = (e) => {
+  console.log('ontrack')
+  console.log(e)
+  handleStream(e.streams[0])
+}
+// =================== ========== ===================
 
 
 // 桌面控制

@@ -12,5 +12,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
    *    - ...args any[]
    */
   handleControlState: (cb) => ipcRenderer.on('control-state-changed', cb),
-  removeControlState: (cb) => ipcRenderer.removeListener('control-state-changed', cb)
+  removeControlState: (cb) => ipcRenderer.removeListener('control-state-changed', cb),
+  getStream: (cb) => ipcRenderer.on('SET_SOURCE', cb),
+  capture: () => ipcRenderer.send("capture") // 触发主进程capturer
 })

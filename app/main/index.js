@@ -1,12 +1,11 @@
 const { app, BrowserWindow } = require('electron')
-// const { create: createWindow } = require('./window/main')
-const { create: createWindow, capturer } = require('./window/control')
+const { create: createWindow } = require('./window/main')
 const handleIPC = require('./ipc')
-const robot = require('./robot')
+// const robot = require('./robot') // 暂时移除 robot 业务
 app.whenReady().then(() => {
-  createWindow().then(capturer)
+  createWindow()
   handleIPC()
-  robot()
+  // robot()
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })

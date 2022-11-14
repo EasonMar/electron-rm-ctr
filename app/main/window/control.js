@@ -1,5 +1,5 @@
 const path = require('path')
-const { BrowserWindow, desktopCapturer } = require('electron')
+const { BrowserWindow } = require('electron')
 
 let win = null;
 function create() {
@@ -20,21 +20,7 @@ function send(channel, ...args) {
   win.webContents.send(channel, ...args)
 }
 
-
-// 桌面捕获
-function capturer() {
-  desktopCapturer.getSources({ types: ['screen'] }).then(async sources => {
-    for (const source of sources) {
-      if (source.id === 'screen:0:0') {
-        win.webContents.send('SET_SOURCE', source.id)
-        return
-      }
-    }
-  })
-}
-
 module.exports = {
   create,
-  send,
-  capturer
+  send
 }

@@ -38,7 +38,6 @@ const { ipcRenderer, contextBridge } = require('electron')
 // window.screen 返回屏幕的宽高
 const { width: screenWidth, height: screenHeight } = window.screen
 contextBridge.exposeInMainWorld('electronAPI', {
-  getStream: (cb) => ipcRenderer.on('SET_SOURCE', cb),
   robot: (type, data) => {
     if (type === 'mouse') {
       data.screen = {
@@ -47,6 +46,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
       }
     }
     ipcRenderer.send('robot', type, data)
-  }
+  },
 })
-

@@ -1,5 +1,5 @@
 const path = require('path')
-const { BrowserWindow } = require('electron')
+const { BrowserWindow, desktopCapturer } = require('electron')
 const isDev = require('electron-is-dev')
 
 let win = null;
@@ -25,7 +25,21 @@ function send(channel, ...args) {
   win.webContents.send(channel, ...args)
 }
 
+// 从桌面捕获音频和视频
+function capturer() {
+  desktopCapturer.getSources({ types: ['screen'] }).then(async sources => {
+    for (const source of sources) {
+      if (source.id === 'screen:0:0') {
+        win.webContents.send('SET_SOURCE', source.id)
+        return
+      }
+    }
+  })
+}
+
+
 module.exports = {
   create,
-  send
+  send,
+  capturer
 }

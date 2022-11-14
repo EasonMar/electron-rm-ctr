@@ -1,6 +1,6 @@
 const { ipcMain } = require('electron')
-const { send: sendMainWin } = require('./window/main')
-// const { create: createControl } = require('./window/control')
+const { send: sendMainWin, capturer } = require('./window/main')
+const { create: createControl } = require('./window/control')
 
 // 封装主进程 IPC handler
 module.exports = function () {
@@ -21,6 +21,9 @@ module.exports = function () {
   ipcMain.on('control', async (e, remoteCode) => {
     // mock - 这里实际上需要跟服务端交互
     sendMainWin('control-state-changed', remoteCode, 1)
-    // createControl()
+    createControl()
   })
+
+  // 监听 capture, 触发桌面录屏
+  ipcMain.on('capture', capturer)
 }
