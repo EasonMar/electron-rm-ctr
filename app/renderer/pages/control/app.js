@@ -8,6 +8,33 @@ function handleStream(stream) {
 // =================== P2P数据传输 ===================
 // RTCPeerConnection - 控制端
 const pc = new window.RTCPeerConnection({})
+
+// 获取 IceCandidate
+pc.onicecandidate = function (e) {
+  console.log('candidate = ', JSON.stringify(e.candidate))
+}
+
+// 添加 IceCandidate
+let candidates = []
+async function addIceCandidate(candidate) {
+  // 条件不满足时, 先缓存 candidates
+  if (candidate) {
+    candidates.push(candidate)
+  }
+
+  // 细节: 需要等到 PeerConnection 设置了 remoteDescription
+  if (pc.remoteDescription && pc.remoteDescription.type) {
+    for (let i = 0; i < candidates.length; i++) {
+      await pc.addIceCandidate(new RTCIceCandidate(candidates[i]))
+    }
+
+    // 清空 candidates
+    candidates = []
+  }
+}
+
+window.addIceCandidate = addIceCandidate
+
 async function createOffer() {
   const offer = await pc.createOffer({
     offerToReceiveAudio: false,
